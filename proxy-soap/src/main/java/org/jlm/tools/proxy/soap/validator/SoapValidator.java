@@ -35,19 +35,34 @@ public class SoapValidator extends XMLValidator {
 
     @Override
     protected Node parseXML(String xmlContent) throws ParserConfigurationException, SAXException, IOException {
-        trySoap(cleanXmlRequest(xmlContent));
+        //trySoap(cleanXmlRequest(xmlContent));
         String requestXMLBody = xmlContent;//extractSoapEnvelope(xmlContent);
-        System.out.println(requestXMLBody);
         Element root = (Element) super.parseXML(requestXMLBody);
-        System.err.println(root);
+        //debugNode(root);
+        
+        // SOAP Specifics
         String soapEnvNamespace = "http://schemas.xmlsoap.org/soap/envelope/";
-
-        System.err.println(root.getChildNodes());
+        //Node bodyNode = root.getElementsByTagNameNS(soapEnvNamespace, "Body").item(0);
         Node bodyNode = root.getElementsByTagNameNS(soapEnvNamespace, "Body").item(0);
-        System.err.println(bodyNode);
+        System.out.println("BODY NODE : " + (bodyNode != null));
+        //debugNode(bodyNode);
         Node requestNode = bodyNode.getFirstChild();
-        System.err.println(requestNode);
+        System.out.println("REQUEST NODE");
+        debugNode(requestNode);
         return requestNode;
+    }
+    
+    private void debugNode(Node node) {
+        System.err.println(" Node Name : " + node.getNodeName());
+        System.err.println(" NS URI : " + node.getNamespaceURI());
+        if(node.getNodeValue() != null) {
+            System.err.println(" Node Value : " + node.getNodeValue());
+        }
+        System.err.println(" Children : " + node.getChildNodes().getLength());
+        for(int i=0;i<node.getChildNodes().getLength();i++) {
+            Node child = node.getChildNodes().item(i);
+            debugNode(child);
+        }
     }
 
     private void trySoap(String requestXMLBody) {

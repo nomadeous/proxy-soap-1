@@ -57,4 +57,9 @@ public class ValidationResult {
         }
         return errors.equals(vO.getErrors());
     }
+
+    @Override
+    public String toString() {
+        return "ValidationResult{" + "xmlWellFormed=" + xmlWellFormed + ", xsdValidationActive=" + xsdValidationActive + ", xsdWellFormed=" + xsdWellFormed + ", xmlValidatedByXSD=" + xmlValidatedByXSD + ", errors=" + errors + '}';
+    }
 }
