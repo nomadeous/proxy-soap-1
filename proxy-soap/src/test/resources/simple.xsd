@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <xs:schema version="1.0"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           elementFormDefault="qualified">
-    <xs:element name="root" type="rootType" />
+           targetNamespace="http://www.webserviceX.NET"
+           xmlns:tns="http://www.webserviceX.NET" >
+    <xs:element name="root" type="tns:rootType" />
     <xs:complexType name="rootType">
         <xs:sequence>
             <xs:element name="child" type="xs:string" minOccurs="1" maxOccurs="1" />

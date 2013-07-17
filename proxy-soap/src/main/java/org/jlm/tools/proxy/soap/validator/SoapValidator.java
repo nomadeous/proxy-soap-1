@@ -28,7 +28,7 @@ public class SoapValidator extends XMLValidator {
         String res = request;
 
         res = res.trim();
-        res = res.replaceAll(">( )*<", "><");
+        res = res.replaceAll(">(\\W)*<", "><");
 
         return res;
     }
@@ -36,7 +36,7 @@ public class SoapValidator extends XMLValidator {
     @Override
     protected Node parseXML(String xmlContent) throws ParserConfigurationException, SAXException, IOException {
         //trySoap(cleanXmlRequest(xmlContent));
-        String requestXMLBody = xmlContent;//extractSoapEnvelope(xmlContent);
+        String requestXMLBody = cleanXmlRequest(xmlContent);//extractSoapEnvelope(xmlContent);
         Element root = (Element) super.parseXML(requestXMLBody);
         //debugNode(root);
         

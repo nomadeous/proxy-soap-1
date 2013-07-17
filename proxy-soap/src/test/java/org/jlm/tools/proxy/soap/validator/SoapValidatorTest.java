@@ -17,9 +17,10 @@ public class SoapValidatorTest {
 
      String xmlContent = "<?xml version=\"1.0\" ?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:web=\"http://www.webserviceX.NET\">\n"
                 + "   <soapenv:Header/>\n"
-                + "   <soapenv:Body><web:root>\n"
+                + "   <soapenv:Body>\n"
+                + "    <web:root>\n"
                 + "         <!--Optional:-->\n"
-                + "         <web:child>123</web:child>\n"
+                + "         <child>123</child>\n"
                 + "      </web:root>\n"
                 + "   </soapenv:Body>\n"
                 + "</soapenv:Envelope>";
@@ -27,10 +28,9 @@ public class SoapValidatorTest {
     /**
      * Test of validate method, of class SoapValidator.
      */
-    @Ignore
     @Test
     public void testValidate() {
-       
+        
         String schemaPath = this.getClass().getClassLoader().getResource("simple.xsd").getFile();
         SoapValidator instance = new SoapValidator();
         ValidationResult expResult = new ValidationResult(true, true, true, true, new ArrayList<String>());

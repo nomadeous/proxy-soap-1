@@ -17,7 +17,7 @@ public class XMLValidatorTest {
      * Test of validate method, of class XMLValidator.
      */
     @Test
-    public void testNotValidXML() {
+    public void testNotValidXMLNoXsd() {
         ValidationResult result = new XMLValidator().validate("");
         assertFalse(result.isValid());
         assertEquals(1, result.getErrors().size());
@@ -30,7 +30,7 @@ public class XMLValidatorTest {
      * Test of validate method, of class XMLValidator.
      */
     @Test
-    public void testValidXML() {
+    public void testValidXMLNoXsd() {
         ValidationResult result = new XMLValidator().validate("<?xml version=\"1.0\" ?><root></root>");
         assertTrue(result.isValid());
         assertEquals(0, result.getErrors().size());
@@ -43,9 +43,9 @@ public class XMLValidatorTest {
      * Test of validate method, of class XMLValidator.
      */
     @Test
-    public void testValidXMLValitedByValidXSD() {
+    public void testValidXmlValitedByValidXsd() {
         String xsdPath = this.getClass().getClassLoader().getResource("simple.xsd").getFile();
-        ValidationResult result = new XMLValidator().validate("<?xml version=\"1.0\" ?><root><child>xxx</child></root>", xsdPath);
+        ValidationResult result = new XMLValidator().validate("<?xml version=\"1.0\" ?><web:root xmlns:web=\"http://www.webserviceX.NET\"><child>xxx</child></web:root>", xsdPath);
         assertTrue(result.isValid());
         assertEquals(0, result.getErrors().size());
     }
@@ -54,7 +54,7 @@ public class XMLValidatorTest {
      * Test of validate method, of class XMLValidator.
      */
     @Test
-    public void testInvalidXMLValitedByValidXSD() {
+    public void testInvalidXmlValitedByValidXsd() {
         String xsdPath = this.getClass().getClassLoader().getResource("simple.xsd").getFile();
         ValidationResult result = new XMLValidator().validate("<?xml version=\"1.0\" ?><root></root>", xsdPath);
         assertFalse("Should not be valid", result.isValid());
@@ -68,9 +68,9 @@ public class XMLValidatorTest {
      * Test of validate method, of class XMLValidator.
      */
     @Test
-    public void testValidXMLValitedByInvalidXSD() {
+    public void testValidXmlValitedByInvalidXsd() {
         String xsdPath = this.getClass().getClassLoader().getResource("simple_invalid.xsd").getFile();
-        ValidationResult result = new XMLValidator().validate("<?xml version=\"1.0\" ?><root><child>xxx</child></root>", xsdPath);
+        ValidationResult result = new XMLValidator().validate("<?xml version=\"1.0\" ?><web:root xmlns:web=\"http://www.webserviceX.NET\"><child>xxx</child></web:root>", xsdPath);
         assertFalse(result.isValid());
         assertEquals(1, result.getErrors().size());
     }
