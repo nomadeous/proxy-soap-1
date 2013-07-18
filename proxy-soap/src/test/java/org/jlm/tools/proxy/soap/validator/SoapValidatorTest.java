@@ -30,7 +30,6 @@ public class SoapValidatorTest {
      */
     @Test
     public void testValidate() {
-        
         String schemaPath = this.getClass().getClassLoader().getResource("simple.xsd").getFile();
         SoapValidator instance = new SoapValidator();
         ValidationResult expResult = new ValidationResult(true, true, true, true, new ArrayList<String>());

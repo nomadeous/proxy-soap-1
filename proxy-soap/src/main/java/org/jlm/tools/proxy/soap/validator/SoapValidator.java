@@ -26,10 +26,8 @@ public class SoapValidator extends XMLValidator {
 
     public static String cleanXmlRequest(String request) {
         String res = request;
-
         res = res.trim();
         res = res.replaceAll(">(\\W)*<", "><");
-
         return res;
     }
 
