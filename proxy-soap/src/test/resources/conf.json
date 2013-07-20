@@ -1,0 +1,12 @@
+{
+    "globalHost": "",
+    "globalPort": 0,
+    "uris": [
+        {"uriSuffix": "/services/service1", "validation": true, "targetUrl": "http://www.google.fr/soap"},
+        {"uriSuffix": "/services/service2", "validation": true, "targetUrl": "bad url"},
+        {"uriSuffix": "/services/service3", "validation": false, "targetUrl": ""},
+        {"uriSuffix": "/services/service4", "validation": true},
+        {"uriSuffix": "/services/service5"},
+        {"uriSuffix": "/ bad uri "}
+    ]
+}

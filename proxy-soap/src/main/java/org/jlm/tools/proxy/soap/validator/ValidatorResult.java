@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author jlamande
  */
-public class ValidationResult {
+public class ValidatorResult {
 
     private boolean xmlWellFormed = false;
     private boolean xsdValidationActive = false;
@@ -19,10 +19,10 @@ public class ValidationResult {
     private boolean xmlValidatedByXSD = false;
     private List<String> errors = new ArrayList<String>();
 
-    public ValidationResult() {
+    public ValidatorResult() {
     }
 
-    public ValidationResult(boolean xmlWellFormed, boolean xsdValidationActive, boolean xsdWellFormed, boolean xmlValidatedByXSD, List<String> errors) {
+    public ValidatorResult(boolean xmlWellFormed, boolean xsdValidationActive, boolean xsdWellFormed, boolean xmlValidatedByXSD, List<String> errors) {
         this.xmlWellFormed = xmlWellFormed;
         this.xsdValidationActive = xsdValidationActive;
         this.xsdWellFormed = xsdWellFormed;
@@ -48,10 +48,10 @@ public class ValidationResult {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof ValidationResult)) {
+        if (!(obj instanceof ValidatorResult)) {
             return false;
         }
-        ValidationResult vO = (ValidationResult) obj;
+        ValidatorResult vO = (ValidatorResult) obj;
         if (vO.isValid() != this.isValid()) {
             return false;
         }

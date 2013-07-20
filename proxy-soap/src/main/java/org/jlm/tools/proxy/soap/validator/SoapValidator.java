@@ -19,7 +19,7 @@ import org.xml.sax.SAXException;
  *
  * @author jlamande
  */
-public class SoapValidator extends XMLValidator {
+public class SoapValidator extends XmlValidator {
 
     private static final String ENV_BEGIN_PATTERN = "(^<[a-zA-Z]+:[e|E]nvelope([^>]*)>.*)|(^<[e|E]nvelope([^>]*)>.*)";
     private static final String ENV_END_PATTERN = "(^</[a-zA-Z]+:[e|E]nvelope([^>]*)>.*)|(^</[e|E]nvelope([^>]*)>.*)";

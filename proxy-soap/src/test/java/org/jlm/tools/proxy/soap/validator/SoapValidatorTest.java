@@ -32,8 +32,8 @@ public class SoapValidatorTest {
     public void testValidate() {
         String schemaPath = this.getClass().getClassLoader().getResource("simple.xsd").getFile();
         SoapValidator instance = new SoapValidator();
-        ValidationResult expResult = new ValidationResult(true, true, true, true, new ArrayList<String>());
-        ValidationResult result = instance.validate(xmlContent, schemaPath);
+        ValidatorResult expResult = new ValidatorResult(true, true, true, true, new ArrayList<String>());
+        ValidatorResult result = instance.validate(xmlContent, schemaPath);
         System.err.println(result);
         assertEquals(expResult.isValid(), result.isValid());
     }
