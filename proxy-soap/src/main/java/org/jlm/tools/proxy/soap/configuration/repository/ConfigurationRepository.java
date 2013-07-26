@@ -14,5 +14,5 @@ public interface ConfigurationRepository {
 
     Configuration findConfigurationByPath(String path);
 
-    void save(Configuration configuration);
+    void save(Configuration configuration, String path);
 }

@@ -4,6 +4,9 @@
  */
 package org.jlm.tools.proxy.soap.configuration.repository;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.bind.JAXBContext;
@@ -35,7 +38,11 @@ public class ConfigurationRepositoryJson implements ConfigurationRepository {
     }
 
     JAXBContext createJAXBContext() throws JAXBException {
-        System.out.println("JAXBCONTEXT : " + JAXBContext.newInstance(Configuration.class).getClass());
+        System.out.println(
+                "JAXBCONTEXT : " + JAXBContext.newInstance(Configuration.class).getClass());
+        System.out.println(
+                "Path : " + JAXBContext.newInstance(Configuration.class).getClass().getClassLoader().getResource(
+                JAXBContext.newInstance(Configuration.class).getClass().getName().replace('.', '/') + ".class").toString());
         Map<String, Object> properties = new HashMap<String, Object>(3);
         //properties.put(JAXBContextFactory.ECLIPSELINK_OXM_XML_KEY, "org/example/bindingfile/bindings.json");
         properties.put("eclipselink.media-type", "application/json");
@@ -54,7 +61,8 @@ public class ConfigurationRepositoryJson implements ConfigurationRepository {
             // ignore the root element
             unmarshaller.setProperty(UnmarshallerProperties.JSON_INCLUDE_ROOT, false);
             //StreamSource json = new StreamSource(new File("src/org/example/bindingfile/input.json"));
-            Configuration conf = unmarshaller.unmarshal(new StreamSource(new java.io.StringReader(json)), Configuration.class).getValue();
+            Configuration conf = unmarshaller.unmarshal(new StreamSource(new java.io.StringReader(
+                    json)), Configuration.class).getValue();
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Conf from JSON : " + conf);
             }
@@ -66,7 +74,17 @@ public class ConfigurationRepositoryJson implements ConfigurationRepository {
     }
 
     @Override
-    public void save(Configuration configuration) {
+    public void save(Configuration configuration, String path) {
+        OutputStream out = null;
+        if (path == null) {
+            out = System.out;
+        } else {
+            try {
+                out = new FileOutputStream(path);
+            } catch (FileNotFoundException e) {
+                LOG.error("Output file not found");
+            }
+        }
         try {
             JAXBContext jc = createJAXBContext();
             Marshaller marshaller = jc.createMarshaller();
@@ -74,7 +92,7 @@ public class ConfigurationRepositoryJson implements ConfigurationRepository {
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             // ignore the root element
             marshaller.setProperty(MarshallerProperties.JSON_INCLUDE_ROOT, false);
-            marshaller.marshal(configuration, System.out);
+            marshaller.marshal(configuration, out);
         } catch (JAXBException e) {
             LOG.error(e.getMessage(), e);
         }

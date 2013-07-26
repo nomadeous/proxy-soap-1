@@ -46,8 +46,7 @@ public class ConfigurationRepositoryJsonTest {
     }
 
     /**
-     * Test of findConfigurationByPath method, of class
-     * ConfigurationRepositoryJson.
+     * Test of findConfigurationByPath method, of class ConfigurationRepositoryJson.
      */
     @Test
     public void testBuildConfigurationFromJson() {
@@ -59,9 +58,12 @@ public class ConfigurationRepositoryJsonTest {
         assertEquals(5, conf.getUris().size());
         assertNotNull(conf.getConfigurationUri("/services/service1"));
         assertEquals(true, conf.getConfigurationUri("/services/service1").isValidationActive());
-        assertEquals("http://www.google.fr/soap", conf.getConfigurationUri("/services/service1").getTargetUrl().toString());
+        assertEquals("http://www.google.fr/soap",
+                conf.getConfigurationUri("/services/service1").getTargetUrl().toString());
         assertNotNull(conf.getConfigurationUri("/services/service2").getTargetUrl());
-        assertTrue(conf.getConfigurationUri("/services/service2").getTargetUrl().toString().startsWith(conf.getGlobalProtocol() + "://" + conf.getGlobalHost() + "/"));
+        assertTrue(
+                conf.getConfigurationUri("/services/service2").getTargetUrl().toString().startsWith(
+                conf.getGlobalProtocol() + "://" + conf.getGlobalHost() + "/"));
     }
 
     @Test
@@ -72,8 +74,7 @@ public class ConfigurationRepositoryJsonTest {
     }
 
     /**
-     * Test of findConfigurationByPath method, of class
-     * ConfigurationRepositoryJson.
+     * Test of findConfigurationByPath method, of class ConfigurationRepositoryJson.
      */
     @Test
     public void testFindConfigurationByPath() {
@@ -91,6 +92,6 @@ public class ConfigurationRepositoryJsonTest {
         ConfigurationRepositoryJson repo = new ConfigurationRepositoryJson();
         Configuration conf = repo.buildConfigurationFromJson(jsonConf2);
         conf.addUri("test", true, new java.net.URL("http://www.google.fr"));
-        repo.save(conf);
+        repo.save(conf, null);
     }
 }

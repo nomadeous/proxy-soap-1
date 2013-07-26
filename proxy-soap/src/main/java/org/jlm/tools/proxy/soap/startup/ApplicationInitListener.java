@@ -21,19 +21,24 @@ public class ApplicationInitListener implements ServletContextListener {
     private static final Logger LOG =
             LoggerFactory.getLogger(ApplicationInitListener.class);
     private static final String DEFAULT_CONF_PATH = "classpath://proxyConfiguration.json";
+    private ConfigurationRepository repository;
+
+    public ApplicationInitListener() {
+        repository = new ConfigurationRepositoryJson();
+    }
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         LOG.info("Application starting");
-        ConfigurationRepository repository = new ConfigurationRepositoryJson();
         Configuration config = repository.findConfigurationByPath(getConfigurationPath());
-        //sce.getServletContext().getContext("/").get
         sce.getServletContext().setAttribute("config", config);
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         LOG.info("Application stopped");
+        Configuration config = (Configuration) sce.getServletContext().getAttribute("config");
+        repository.save(config, getConfigurationPath() + ".bk");
     }
 
     private String getConfigurationPath() {
