@@ -7,6 +7,7 @@ package org.jlm.tools.proxy.soap.validation;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -26,6 +27,9 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+import org.jlm.tools.proxy.soap.io.Streams;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -38,8 +42,15 @@ import org.xml.sax.SAXException;
  */
 public class XmlValidator {
 
+    private static final Logger LOG =
+            LoggerFactory.getLogger(XmlValidator.class);
+
     public ValidatorResult validate(String xmlContent) {
         return validate(xmlContent, null);
+    }
+
+    public ValidatorResult validate(InputStream is) {
+        return validate(Streams.getString(is), null);
     }
 
     public ValidatorResult validate(String xmlContent, String schemaPath) {
@@ -64,11 +75,15 @@ public class XmlValidator {
                 xmlValidatedByXSD = validateXSD(nodeToString(root), validator, errors);
             }
         } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
             errors.add(e.getMessage());
         }
 
         ValidatorResult vOut =
-                new ValidatorResult(xmlWellFormed, xsdValidationActive, xsdWellFormed, xmlValidatedByXSD, errors);
+                new ValidatorResult(xmlWellFormed, xsdValidationActive, xsdWellFormed,
+                xmlValidatedByXSD, errors);
+
+        LOG.info("Validation DONE");
 
         return vOut;
     }

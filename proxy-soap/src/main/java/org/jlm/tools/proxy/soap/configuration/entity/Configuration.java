@@ -20,6 +20,9 @@ import org.slf4j.LoggerFactory;
 /**
  *
  * @author julamand
+ *
+ * TODO : change the List impl of ConfigUris by a Map. JSON marshalling can be unaffected.
+ *
  */
 @XmlRootElement
 @ToString
@@ -82,6 +85,9 @@ public class Configuration implements Serializable {
         if (getConfigurationUri(uriSuffix) == null) {
             getUris().add(new ConfigurationUri(uriSuffix, isValidationActive, targetUrl));
         } else {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(this.getUris().toString());
+            }
             throw new IllegalArgumentException("uriSuffix already in use");
         }
     }
@@ -92,10 +98,21 @@ public class Configuration implements Serializable {
         if (uriSuffix != null && !"".equals(uriSuffix.trim())) {
             for (ConfigurationUri uri : getUris()) {
                 if (uriSuffix.equals(uri.getUriSuffix())) {
-                    confUri = uri.cloneConfigurationUri(getDefaultUriPrefix(), globalValidationActive);
+                    confUri = uri.cloneConfigurationUri(getDefaultUriPrefix(),
+                            globalValidationActive);
                     break;
                 }
             }
+        }
+        return confUri;
+    }
+
+    public ConfigurationUri getConfigurationUri(String uriSuffix, boolean forceCreation) {
+        ConfigurationUri confUri = getConfigurationUri(uriSuffix);
+        if (confUri == null) {
+            confUri = new ConfigurationUri(uriSuffix, globalValidationActive, null).cloneConfigurationUri(
+                    getDefaultUriPrefix(),
+                    globalValidationActive);
         }
         return confUri;
     }

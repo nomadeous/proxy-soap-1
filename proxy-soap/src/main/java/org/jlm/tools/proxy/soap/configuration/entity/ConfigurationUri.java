@@ -35,12 +35,15 @@ public class ConfigurationUri implements Serializable {
     private Boolean validationActive = null;
     @XmlElement(name = "targetUrl")
     private URL targetUrl;
+    @XmlElement(name = "xsdPath")
+    private String xsdPath;
 
     public boolean isValidationActive() {
         return (validationActive != null) ? validationActive : false;
     }
 
-    protected ConfigurationUri cloneConfigurationUri(String defaultTarget, Boolean defaultValidation) {
+    protected ConfigurationUri cloneConfigurationUri(String defaultTarget, Boolean defaultValidation,
+            String xsdRootPath) {
         Boolean validation = validationActive;
         if (validation == null) {
             validation = defaultValidation;
@@ -56,7 +59,7 @@ public class ConfigurationUri implements Serializable {
                 LOG.warn("URL computing in error : " + e2.getMessage());
             }
         }
-        return new ConfigurationUri(uriSuffix, validation, url);
+        return new ConfigurationUri(uriSuffix, validation, url, xsdRootPath + uriSuffix);
     }
 
     @XmlElement(name = "uriSuffix")

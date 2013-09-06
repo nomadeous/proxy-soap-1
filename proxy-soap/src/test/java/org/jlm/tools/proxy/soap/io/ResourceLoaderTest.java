@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jlm.tools.proxy.soap.configuration.repository;
+package org.jlm.tools.proxy.soap.io;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;

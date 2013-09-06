@@ -91,7 +91,7 @@ public class ConfigurationRepositoryJsonTest {
     public void testSave() throws Exception {
         ConfigurationRepositoryJson repo = new ConfigurationRepositoryJson();
         Configuration conf = repo.buildConfigurationFromJson(jsonConf2);
-        conf.addUri("test", true, new java.net.URL("http://www.google.fr"));
+        conf.addUri("/test", true, new java.net.URL("http://www.google.fr"));
         repo.save(conf, null);
     }
 }

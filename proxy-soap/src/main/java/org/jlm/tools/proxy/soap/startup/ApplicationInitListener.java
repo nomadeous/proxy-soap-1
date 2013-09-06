@@ -9,6 +9,7 @@ import javax.servlet.ServletContextListener;
 import org.jlm.tools.proxy.soap.configuration.entity.Configuration;
 import org.jlm.tools.proxy.soap.configuration.repository.ConfigurationRepository;
 import org.jlm.tools.proxy.soap.configuration.repository.ConfigurationRepositoryJson;
+import org.jlm.tools.proxy.soap.frontend.FrontEndCallsCollector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,13 +33,14 @@ public class ApplicationInitListener implements ServletContextListener {
         LOG.info("Application starting");
         Configuration config = repository.findConfigurationByPath(getConfigurationPath());
         sce.getServletContext().setAttribute("config", config);
+        sce.getServletContext().setAttribute("collector", new FrontEndCallsCollector());
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         LOG.info("Application stopped");
         Configuration config = (Configuration) sce.getServletContext().getAttribute("config");
-        repository.save(config, getConfigurationPath() + ".bk");
+        //repository.save(config, getConfigurationPath() + ".bk");
     }
 
     private String getConfigurationPath() {

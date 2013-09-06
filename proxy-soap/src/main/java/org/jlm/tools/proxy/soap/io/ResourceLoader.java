@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jlm.tools.proxy.soap.configuration.repository;
+package org.jlm.tools.proxy.soap.io;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,7 +21,7 @@ public class ResourceLoader {
     private static final Logger LOG =
             LoggerFactory.getLogger(ResourceLoader.class);
 
-    protected String load(String path) {
+    public String load(String path) {
         String resource = "";
         URL url = null;
         if (path != null && path.startsWith("classpath://")) {

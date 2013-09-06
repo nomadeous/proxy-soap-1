@@ -4,6 +4,7 @@
  */
 package org.jlm.tools.proxy.soap.configuration.repository;
 
+import org.jlm.tools.proxy.soap.io.ResourceLoader;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;

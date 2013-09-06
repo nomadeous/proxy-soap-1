@@ -11,6 +11,8 @@ import java.io.StringReader;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
@@ -21,6 +23,8 @@ import org.xml.sax.SAXException;
  */
 public class SoapValidator extends XmlValidator {
 
+    private static final Logger LOG =
+            LoggerFactory.getLogger(XmlValidator.class);
     private static final String ENV_BEGIN_PATTERN = "(^<[a-zA-Z]+:[e|E]nvelope([^>]*)>.*)|(^<[e|E]nvelope([^>]*)>.*)";
     private static final String ENV_END_PATTERN = "(^</[a-zA-Z]+:[e|E]nvelope([^>]*)>.*)|(^</[e|E]nvelope([^>]*)>.*)";
 
@@ -37,7 +41,7 @@ public class SoapValidator extends XmlValidator {
         String requestXMLBody = cleanXmlRequest(xmlContent);//extractSoapEnvelope(xmlContent);
         Element root = (Element) super.parseXML(requestXMLBody);
         //debugNode(root);
-        
+
         // SOAP Specifics
         String soapEnvNamespace = "http://schemas.xmlsoap.org/soap/envelope/";
         //Node bodyNode = root.getElementsByTagNameNS(soapEnvNamespace, "Body").item(0);
@@ -45,19 +49,21 @@ public class SoapValidator extends XmlValidator {
         System.out.println("BODY NODE : " + (bodyNode != null));
         //debugNode(bodyNode);
         Node requestNode = bodyNode.getFirstChild();
-        System.out.println("REQUEST NODE");
-        debugNode(requestNode);
+        System.out.println("BODY FIRST NODE");
+        if (LOG.isDebugEnabled()) {
+            debugNode(requestNode);
+        }
         return requestNode;
     }
-    
+
     private void debugNode(Node node) {
-        System.err.println(" Node Name : " + node.getNodeName());
-        System.err.println(" NS URI : " + node.getNamespaceURI());
-        if(node.getNodeValue() != null) {
-            System.err.println(" Node Value : " + node.getNodeValue());
+        LOG.debug(" Node Name : " + node.getNodeName());
+        LOG.debug(" NS URI : " + node.getNamespaceURI());
+        if (node.getNodeValue() != null) {
+            LOG.debug(" Node Value : " + node.getNodeValue());
         }
-        System.err.println(" Children : " + node.getChildNodes().getLength());
-        for(int i=0;i<node.getChildNodes().getLength();i++) {
+        LOG.debug(" Children : " + node.getChildNodes().getLength());
+        for (int i = 0; i < node.getChildNodes().getLength(); i++) {
             Node child = node.getChildNodes().item(i);
             debugNode(child);
         }
@@ -65,12 +71,12 @@ public class SoapValidator extends XmlValidator {
 
     private void trySoap(String requestXMLBody) {
         try {
-            SOAPMessage msg = MessageFactory.newInstance().createMessage(null, new ByteArrayInputStream(requestXMLBody.getBytes()));
-            System.out.println("SOAP BODY");
-            System.out.println(msg.getSOAPBody());
+            SOAPMessage msg = MessageFactory.newInstance().createMessage(null,
+                    new ByteArrayInputStream(requestXMLBody.getBytes()));
+            LOG.debug("SOAP BODY");
+            LOG.debug(msg.getSOAPBody().toString());
         } catch (Exception e) {
-            System.err.println(e.getMessage());
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
         }
     }
 
@@ -87,10 +93,12 @@ public class SoapValidator extends XmlValidator {
             if (requestLine.matches(ENV_BEGIN_PATTERN) && requestLine.matches(ENV_END_PATTERN)) {
                 beginFound = true;
                 endFound = true;
-            } else if (requestLine.matches(ENV_BEGIN_PATTERN) && !requestLine.matches(ENV_END_PATTERN)) {
+            } else if (requestLine.matches(ENV_BEGIN_PATTERN) && !requestLine.matches(
+                    ENV_END_PATTERN)) {
                 requestXMLBuf.append(requestLine);
                 beginFound = true;
-            } else if (!requestLine.matches(ENV_BEGIN_PATTERN) && requestLine.matches(ENV_END_PATTERN)) {
+            } else if (!requestLine.matches(ENV_BEGIN_PATTERN) && requestLine.matches(
+                    ENV_END_PATTERN)) {
                 requestXMLBuf.append(requestLine);
                 endFound = true;
             }
